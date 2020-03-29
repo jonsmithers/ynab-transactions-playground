@@ -1,8 +1,10 @@
+// import {Account} from './account';
+// import {google} from 'googleapis';
 import {API} from 'ynab';
 
-// import {Account} from './account';
 import {Budget} from './beans/budget';
 import {CategoryGroup} from './beans/category';
+// import {SheetsBudgetDAO} from './dao/sheets/budget';
 import {YnabBudgetDAO} from './dao/ynab/budget';
 import {YnabTransactionsDAO} from './dao/ynab/transactions';
 import {Exporter, mergeCategoriesCrossBudgets} from './export';
@@ -15,6 +17,9 @@ const accessToken = process.argv[2];
 const ynabAPI = new API(accessToken);
 const budgetService = new YnabBudgetDAO(ynabAPI);
 const transactionsService = new YnabTransactionsDAO(ynabAPI);
+
+// const sheets = google.sheets({version: 'v4', auth});
+// const sheetsBudgetService = new SheetsBudgetDAO(sheets);
 
 const exporter = new Exporter(budgetService, transactionsService, ynabAPI);
 
