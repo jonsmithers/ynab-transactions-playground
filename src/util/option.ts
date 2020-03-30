@@ -3,6 +3,7 @@ export interface Option<T> {
   flatMap<R>(fn: (value: T) => Option<R>): Option<R>;
   filter(fn: (value: T) => boolean): Option<T>;
   unwrap(error?: string): T;
+  unwrapOr(val: T): T;
 }
 
 export class None<T> implements Option<T> {
@@ -20,6 +21,10 @@ export class None<T> implements Option<T> {
 
   unwrap(error?: string): T {
     throw new Error(error ?? 'Tried to unwrap None');
+  }
+
+  unwrapOr(val: T): T {
+    return val;
   }
 }
 
@@ -42,6 +47,10 @@ export class Some<T> implements Option<T> {
   }
 
   unwrap(): T {
+    return this.value;
+  }
+
+  unwrapOr(): T {
     return this.value;
   }
 }
