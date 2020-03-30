@@ -2,11 +2,8 @@ import {sheets_v4} from 'googleapis';
 
 import {Budget} from '../../beans/budget';
 import {BudgetDAO} from '../interface/budget';
+import {SheetRange} from './interfaces';
 
-export interface SheetRange {
-  range: string;
-  spreadsheetId: string;
-}
 
 export class SheetsBudgetDAO implements BudgetDAO {
   constructor(
