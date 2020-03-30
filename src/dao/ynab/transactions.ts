@@ -31,4 +31,12 @@ export class YnabTransactionsDAO implements TransactionsDAO {
         .then(resp => fromNullable(resp.data.transaction).unwrap())
         .then(t => new Transaction(t));
   }
+
+  saveAll(b_id: string, transactions: Transaction[]): Promise<Transaction[]> {
+    return this.ynabAPI.transactions
+        .createTransactions(
+            b_id, {transactions: transactions.map(t => t.toSaveObject())})
+        .then(resp => fromNullable(resp.data.transactions).unwrap())
+        .then(ts => ts.map(t => new Transaction(t)));
+  }
 }

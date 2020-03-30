@@ -45,19 +45,18 @@ fs.readFile('credentials.json', {encoding: 'utf8'}, (err, content) => {
         return sheetsBudgetService.getAll().then((budgets) => {
           let billy: Budget|undefined;
           for (const b of budgets) {
-            if (b.name === 'Billy') {
+            if (b.name === 'Marissa') {
               billy = b;
               break;
             }
           }
           return transactionsService.getAllInBudget(billy!.id).then(
               (transactions) => {
-                console.log(
-                    transactions.map(t => t.toSheetsArray(billy?.id ?? ''))
-                        .join('\n'));
-                // for (const t of transactions) {
-                // await sheetsTransactionsService.save(billy!.id, t);
-                //}
+                //  console.log(
+                //      transactions.map(t => t.toSheetsArray(billy?.id ?? ''))
+                //          .join('\n'));
+                return sheetsTransactionsService.saveAll(
+                    billy!.id, transactions);
               });
         });
       })

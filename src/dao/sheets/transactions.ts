@@ -26,15 +26,7 @@ export class SheetsTransactionsDAO implements TransactionsDAO {
   }
 
   save(b_id: string, transaction: Transaction): Promise<Transaction> {
-    return this.sheetsService.spreadsheets.values
-        .append({
-          ...this.sheetRangeBuilder.withSheet(b_id).build(),
-          valueInputOption: 'USER_ENTERED',
-          requestBody: {
-            values: [transaction.toSheetsArray(b_id)],
-          }
-        })
-        .then(() => transaction);
+    return this.saveAll(b_id, [transaction]).then((ts) => ts[0]);
   }
 
   update(): Promise<Transaction> {
@@ -43,5 +35,15 @@ export class SheetsTransactionsDAO implements TransactionsDAO {
 
   delete(): Promise<Transaction> {
     throw new Error('Not implemented');
+  }
+
+  saveAll(b_id: string, transactions: Transaction[]): Promise<Transaction[]> {
+    return this.sheetsService.spreadsheets.values
+        .append({
+          ...this.sheetRangeBuilder.withSheet(b_id).build(),
+          valueInputOption: 'USER_ENTERED',
+          requestBody: {values: transactions.map(t => t.toSheetsArray(b_id))}
+        })
+        .then(() => transactions);
   }
 }

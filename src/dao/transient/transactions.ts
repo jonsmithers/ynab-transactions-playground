@@ -50,4 +50,14 @@ export class TransientTransactionsDAO implements TransactionsDAO {
         .then(ts => ts.unwrap('Transaction not found')!)
         .then(() => transaction);
   }
+
+  saveAll(b_id: string, transactions: Transaction[]): Promise<Transaction[]> {
+    return Promise.resolve()
+        .then(() => fromNullable(this.transactions.get(b_id)))
+        .then(ts => ts.unwrap('Budget not found') && ts)
+        //.then(ts => ts.filter(ts => ts.every((t) => t.id !== transaction.id)))
+        .then(ts => ts.unwrap('Transaction already exists')!)
+        .then(ts => ts.push(...transactions))
+        .then(() => transactions);
+  }
 }
