@@ -9,7 +9,7 @@ export class SheetsTransactionsDAO implements TransactionsDAO {
   constructor(
       readonly sheetsService: sheets_v4.Sheets,
       readonly sheetRangeBuilder: SheetRangeBuilder) {
-    this.sheetRangeBuilder.withSheetPrefix('Transactions: ');
+    this.sheetRangeBuilder.withSheetPrefix('Transactions');
   }
 
   getAllInBudget(b_id: string): Promise<Transaction[]> {

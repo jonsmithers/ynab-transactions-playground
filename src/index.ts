@@ -20,8 +20,7 @@ const TOKEN_PATH = 'token.json';
 
 const spreadsheetId = '19tIbdPyrwrb_pLsp5QTV6y24RpptC9U-86agbmvupPI';
 const budgetRange = 'Budgets!A1:D';
-const transactionsRange =
-    'Transactionsf1844444-8147-42d0-8f14-92fcdcdaa710!A1:O';
+const transactionsRange = 'A1:O';
 const accessToken = process.argv[2];
 
 const ynabAPI = new API(accessToken);
@@ -52,9 +51,6 @@ fs.readFile('credentials.json', {encoding: 'utf8'}, (err, content) => {
           }
           return transactionsService.getAllInBudget(billy!.id).then(
               (transactions) => {
-                //  console.log(
-                //      transactions.map(t => t.toSheetsArray(billy?.id ?? ''))
-                //          .join('\n'));
                 return sheetsTransactionsService.saveAll(
                     billy!.id, transactions);
               });
