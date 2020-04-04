@@ -1,7 +1,7 @@
-import {API} from 'ynab';
+import { API } from 'ynab';
 
-import {Budget} from '../../beans/budget';
-import {BudgetDAO} from '../interface/budget';
+import { Budget } from '../../beans/budget';
+import { BudgetDAO } from '../interface/budget';
 
 export class YnabBudgetDAO implements BudgetDAO {
   constructor(private readonly ynabAPI: API) {}
@@ -13,8 +13,9 @@ export class YnabBudgetDAO implements BudgetDAO {
   }
 
   getById(id: string): Promise<Budget> {
-    return this.ynabAPI.budgets.getBudgetById(id).then(
-        budgetResponse => new Budget(budgetResponse.data.budget));
+    return this.ynabAPI.budgets
+      .getBudgetById(id)
+      .then(budgetResponse => new Budget(budgetResponse.data.budget));
   }
 
   save(): Promise<void> {

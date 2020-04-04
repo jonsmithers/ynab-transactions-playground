@@ -55,6 +55,6 @@ export class Some<T> implements Option<T> {
   }
 }
 
-export function fromNullable<T>(maybe?: T|null): Option<T> {
+export function fromNullable<T>(maybe?: T | null): Option<T> {
   return maybe == null ? new None() : new Some(maybe!);
 }

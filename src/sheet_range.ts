@@ -24,7 +24,7 @@ export class SheetRangeBuilder {
   build(): SheetRange {
     return {
       range: `\'${this.sheetPrefix}${this.sheet}\'!${this.range}`,
-      spreadsheetId: this.spreadsheetId
+      spreadsheetId: this.spreadsheetId,
     };
   }
 }

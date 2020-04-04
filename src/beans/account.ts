@@ -1,4 +1,4 @@
-import {Account as AccountData} from 'ynab';
+import { Account as AccountData } from 'ynab';
 
 export class Account {
   constructor(readonly account: AccountData) {}

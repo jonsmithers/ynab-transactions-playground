@@ -1,4 +1,4 @@
-import {Transaction} from '../../beans/transaction';
+import { Transaction } from '../../beans/transaction';
 
 export interface TransactionsDAO {
   getAllInBudget(b_id: string): Promise<Transaction[]>;

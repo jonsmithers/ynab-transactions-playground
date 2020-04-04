@@ -1,16 +1,16 @@
 import * as fs from 'fs';
-import {OAuth2Client} from 'google-auth-library';
-import {google} from 'googleapis';
+import { OAuth2Client } from 'google-auth-library';
+import { google } from 'googleapis';
 import * as readline from 'readline';
-import {API} from 'ynab';
+import { API } from 'ynab';
 
-import {Budget} from './beans/budget';
-import {Transaction} from './beans/transaction';
-import {SheetsBudgetDAO} from './dao/sheets/budget';
-import {SheetsTransactionsDAO} from './dao/sheets/transactions';
-import {YnabTransactionsDAO} from './dao/ynab/transactions';
-import {SheetsService} from './service/sheets';
-import {SheetRangeBuilder} from './sheet_range';
+import { Budget } from './beans/budget';
+import { Transaction } from './beans/transaction';
+import { SheetsBudgetDAO } from './dao/sheets/budget';
+import { SheetsTransactionsDAO } from './dao/sheets/transactions';
+import { YnabTransactionsDAO } from './dao/ynab/transactions';
+import { SheetsService } from './service/sheets';
+import { SheetRangeBuilder } from './sheet_range';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -29,37 +29,46 @@ const ynabAPI = new API(accessToken);
 const transactionsService = new YnabTransactionsDAO(ynabAPI);
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', {encoding: 'utf8'}, (err, content) => {
+fs.readFile('credentials.json', { encoding: 'utf8' }, (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Sheets API.
   authorize(JSON.parse(content))
-      .then((auth) => {
-        const sheets = google.sheets({version: 'v4', auth});
-        const sheetsBudgetService =
-            new SheetsBudgetDAO(sheets, {spreadsheetId, range: budgetRange});
-        const rangeBuilder =
-            new SheetRangeBuilder(transactionsRange, spreadsheetId);
-        const sheetsService = new SheetsService<Transaction>(
-            sheets, rangeBuilder, Transaction.fromSheetsArray,
-            (t: Transaction, b_id?: string) => t.toSheetsArray(b_id!));
-        const sheetsTransactionsService =
-            new SheetsTransactionsDAO(sheetsService, rangeBuilder);
-        return sheetsBudgetService.getAll().then((budgets) => {
-          let billy: Budget|undefined;
-          for (const b of budgets) {
-            if (b.name === 'Marissa') {
-              billy = b;
-              break;
-            }
+    .then(auth => {
+      const sheets = google.sheets({ version: 'v4', auth });
+      const sheetsBudgetService = new SheetsBudgetDAO(sheets, {
+        spreadsheetId,
+        range: budgetRange,
+      });
+      const rangeBuilder = new SheetRangeBuilder(
+        transactionsRange,
+        spreadsheetId
+      );
+      const sheetsService = new SheetsService<Transaction>(
+        sheets,
+        rangeBuilder,
+        Transaction.fromSheetsArray,
+        (t: Transaction, b_id?: string) => t.toSheetsArray(b_id!)
+      );
+      const sheetsTransactionsService = new SheetsTransactionsDAO(
+        sheetsService,
+        rangeBuilder
+      );
+      return sheetsBudgetService.getAll().then(budgets => {
+        let billy: Budget | undefined;
+        for (const b of budgets) {
+          if (b.name === 'Marissa') {
+            billy = b;
+            break;
           }
-          return transactionsService.getAllInBudget(billy!.id).then(
-              (transactions) => {
-                return sheetsTransactionsService.saveAll(
-                    billy!.id, transactions);
-              });
-        });
-      })
-      .catch(console.log);
+        }
+        return transactionsService
+          .getAllInBudget(billy!.id)
+          .then(transactions => {
+            return sheetsTransactionsService.saveAll(billy!.id, transactions);
+          });
+      });
+    })
+    .catch(console.log);
 });
 
 /**
@@ -68,13 +77,16 @@ fs.readFile('credentials.json', {encoding: 'utf8'}, (err, content) => {
  * @param {Object} credentials The authorization client credentials.
  */
 function authorize(credentials): Promise<OAuth2Client> {
-  const {client_secret, client_id, redirect_uris} = credentials.installed;
-  const oAuth2Client =
-      new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+  const { client_secret, client_id, redirect_uris } = credentials.installed;
+  const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+  );
 
   // Check if we have previously stored a token.
-  return new Promise<OAuth2Client>((res) => {
-    fs.readFile(TOKEN_PATH, {encoding: 'utf8'}, (err, token) => {
+  return new Promise<OAuth2Client>(res => {
+    fs.readFile(TOKEN_PATH, { encoding: 'utf8' }, (err, token) => {
       if (err) {
         res(getNewToken(oAuth2Client));
         return;
@@ -103,7 +115,7 @@ function getNewToken(oAuth2Client): Promise<OAuth2Client> {
     output: process.stdout,
   });
   return new Promise<OAuth2Client>((res, rej) => {
-    rl.question('Enter the code from that page here: ', (code) => {
+    rl.question('Enter the code from that page here: ', code => {
       rl.close();
       oAuth2Client.getToken(code, (err, token) => {
         if (err) {
@@ -113,7 +125,7 @@ function getNewToken(oAuth2Client): Promise<OAuth2Client> {
         }
         oAuth2Client.setCredentials(token);
         // Store the token to disk for later program executions
-        fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
+        fs.writeFile(TOKEN_PATH, JSON.stringify(token), err => {
           if (err) {
             console.error(err);
             rej();

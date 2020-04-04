@@ -1,13 +1,13 @@
-import {Transaction} from '../../beans/transaction';
-import {SheetsService} from '../../service/sheets';
-import {SheetRangeBuilder} from '../../sheet_range';
-import {TransactionsDAO} from '../interface/transactions';
-
+import { Transaction } from '../../beans/transaction';
+import { SheetsService } from '../../service/sheets';
+import { SheetRangeBuilder } from '../../sheet_range';
+import { TransactionsDAO } from '../interface/transactions';
 
 export class SheetsTransactionsDAO implements TransactionsDAO {
   constructor(
-      readonly sheetsService: SheetsService<Transaction>,
-      readonly sheetRangeBuilder: SheetRangeBuilder) {
+    readonly sheetsService: SheetsService<Transaction>,
+    readonly sheetRangeBuilder: SheetRangeBuilder
+  ) {
     this.sheetRangeBuilder.withSheetPrefix('Transactions');
   }
 

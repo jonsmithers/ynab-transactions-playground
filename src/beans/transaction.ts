@@ -1,6 +1,6 @@
-import {SaveTransaction, SubTransaction, TransactionDetail} from 'ynab';
+import { SaveTransaction, SubTransaction, TransactionDetail } from 'ynab';
 
-import {fromNullable} from '../util/option';
+import { fromNullable } from '../util/option';
 
 export interface TransactionData {
   id: string;
@@ -8,15 +8,15 @@ export interface TransactionData {
   account_name: string;
   date: string;
   amount: number;
-  payee_id?: string|null;
-  payee_name?: string|null;
-  category_id?: string|null;
-  category_name?: string|null;
-  memo?: string|null;
+  payee_id?: string | null;
+  payee_name?: string | null;
+  category_id?: string | null;
+  category_name?: string | null;
+  memo?: string | null;
   cleared: TransactionDetail.ClearedEnum;
   approved: boolean;
-  flag_color?: TransactionDetail.FlagColorEnum|null;
-  import_id?: string|null;
+  flag_color?: TransactionDetail.FlagColorEnum | null;
+  import_id?: string | null;
   subtransactions: SubTransaction[];
 }
 
@@ -33,15 +33,15 @@ export class Transaction {
 
   get amount(): number {
     return this.transaction.amount;
-  };
+  }
 
   get inflow(): number {
     return Math.abs(Math.max(0, this.amount));
-  };
+  }
 
   get outflow(): number {
     return Math.abs(Math.min(0, this.amount));
-  };
+  }
 
   get category_id(): string {
     return this.transaction.category_id ?? '';
@@ -84,8 +84,8 @@ export class Transaction {
 
   get flag_color(): string {
     return fromNullable(this.transaction.flag_color)
-        .map(f => f.toString())
-        .unwrapOr('');
+      .map(f => f.toString())
+      .unwrapOr('');
   }
 
   get import_id(): string {
@@ -94,8 +94,10 @@ export class Transaction {
 
   toAspire(): string {
     return `${this.date},${this.inflow / 1000},${this.outflow / 1000},${
-        this.category_name},${this.account_name},${this.memo},${this.cleared},${
-        this.approved},${this.payee_name}`;
+      this.category_name
+    },${this.account_name},${this.memo},${this.cleared},${this.approved},${
+      this.payee_name
+    }`;
   }
 
   toSaveObject(): SaveTransaction {

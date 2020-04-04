@@ -1,4 +1,4 @@
-import {Budget} from '../../beans/budget';
+import { Budget } from '../../beans/budget';
 
 export interface BudgetDAO {
   getAll(): Promise<Budget[]>;

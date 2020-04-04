@@ -1,5 +1,8 @@
-import {Category as CategoryData, CategoryGroupWithCategories as CategoryGroupData} from 'ynab';
-import {fromNullable, Option} from '../util/option';
+import {
+  Category as CategoryData,
+  CategoryGroupWithCategories as CategoryGroupData,
+} from 'ynab';
+import { fromNullable, Option } from '../util/option';
 
 export interface MutableCategoryGroupData {
   name: string;
@@ -22,8 +25,9 @@ export class CategoryGroup implements MutableCategoryGroupData {
   }
 
   toAspire(): string {
-    return `✦,${this.name}\n${
-        this.categories.map(c => c.toAspire()).join('\n')}`;
+    return `✦,${this.name}\n${this.categories
+      .map(c => c.toAspire())
+      .join('\n')}`;
   }
 }
 
@@ -60,11 +64,11 @@ export class Category {
 }
 
 interface GoalData {
-  goal_type?: CategoryData.GoalTypeEnum|null;
-  goal_creation_month?: string|null;
-  goal_target?: number|null;
-  goal_target_month?: string|null;
-  goal_percentage_complete?: number|null;
+  goal_type?: CategoryData.GoalTypeEnum | null;
+  goal_creation_month?: string | null;
+  goal_target?: number | null;
+  goal_target_month?: string | null;
+  goal_percentage_complete?: number | null;
 }
 
 export class Goal {

@@ -1,4 +1,4 @@
-import {Account} from 'ynab';
+import { Account } from 'ynab';
 
 export interface AccountData {
   id: string;
@@ -6,7 +6,7 @@ export interface AccountData {
   type: Account.TypeEnum;
   on_budget: boolean;
   closed: boolean;
-  note?: string|null;
+  note?: string | null;
   balance: number;
   cleared_balance: number;
   uncleared_balance: number;
@@ -16,9 +16,9 @@ export interface AccountData {
 export interface BudgetData {
   id: string;
   name: string;
-  first_month?: string|null;
-  last_month?: string|null;
-  accounts?: Array<AccountData>|null;
+  first_month?: string | null;
+  last_month?: string | null;
+  accounts?: Array<AccountData> | null;
 }
 
 export class Budget {
